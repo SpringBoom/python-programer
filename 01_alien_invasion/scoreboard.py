@@ -1,0 +1,17 @@
+import pygame
+
+
+class Scoreboard:
+    """显示得分信息的类"""
+    def __init__(self, ai_game):
+        """初始化显示得分涉及的属性。"""
+        self.screen = ai_game.screen
+        self.screen_rect = self.screen.get_rect()
+        self.settings = ai_game.settings
+        self.stats = ai_game.stats
+        # 显示得分信息时使用的字体设置。
+        self.text_color = (30,30,30)
+        self.font = pygame.font.SysFont(None, 48)
+        # 准备初始得分图像。
+        self.prep_score()
+        self.prep_high_score()

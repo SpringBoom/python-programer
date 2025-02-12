@@ -1,14 +1,14 @@
 import sys
-from time import sleep
 
 import pygame
 
+from alien import Alien
+from bullet import Bullet
+from button import Button
+from game_stats import GameStats
+from scoreboard import Scoreboard
 from settings import Settings
 from ship import Ship
-from bullet import Bullet
-from alien import Alien
-from game_stats import GameStats
-from button import Button
 
 
 class AlineInvasion:
@@ -25,9 +25,11 @@ class AlineInvasion:
         self.bullets = pygame.sprite.Group()
 
         self.aliens = pygame.sprite.Group()
-        self._create_fleet()
+        self.sb = Scoreboard(self)
 
+        self._create_fleet()
         self.play_button = Button(self, "Play")
+
 
     def run_game(self):
         """游戏主循环"""
@@ -50,6 +52,7 @@ class AlineInvasion:
         """每次循环时都重绘屏幕"""
         self._update_bullets()
         self.aliens.draw(self.screen)
+        self.sb.show_score()
 
         if not self.stats.game_active:
             self.play_button.draw_button()
@@ -112,6 +115,11 @@ class AlineInvasion:
         """响应子弹和外星人的碰撞"""
         # 删除发生碰撞的子弹和外星人。
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+
         if not self.aliens:
             # self.bullets.empty()
             self._create_fleet()
@@ -185,6 +193,7 @@ class AlineInvasion:
             self.ship.center_ship()
 
             self.stats.reset_stats()
+            self.sb.prep_score()
             pygame.mouse.set_visible(False)
 
 

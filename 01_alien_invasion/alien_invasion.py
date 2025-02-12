@@ -27,7 +27,7 @@ class AlineInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
 
-        self.play_button = Button(self,"Play")
+        self.play_button = Button(self, "Play")
 
     def run_game(self):
         """游戏主循环"""
@@ -101,6 +101,7 @@ class AlineInvasion:
         self.bullets.add(bullet)
 
     def _update_bullets(self):
+        self.bullets.update()
         for bullet in self.bullets:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
